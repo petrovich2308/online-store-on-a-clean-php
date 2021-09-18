@@ -1,5 +1,8 @@
 <?php
 
+use core\base\controllers\RouteController;
+use core\base\exceptions\RouteException;
+
 // security constant
 define('VG_ACCESS', true);
 
@@ -9,10 +12,8 @@ session_start();
 require_once 'config.php';
 require_once 'core/base/settings/internal_settings.php';
 
-function load($classname)
-{
-    $classname = str_replace('\\', '/', $classname);
-    include $classname . '.php';
-}
-
-spl_autoload_register('load');
+try {
+    RouteController::getInstance()->route();
+} catch (RouteException $e) {
+    exit($e->getMessage());
+};

@@ -1,5 +1,7 @@
 <?php
 
+use core\base\exceptions\RouteException;
+
 defined('VG_ACCESS') or die('Access denied');
 
 /**
@@ -32,3 +34,17 @@ const USER_CSS_JS = [
     'styles' => [],
     'scripts' => []
 ];
+
+/**
+ * @throws RouteException
+ */
+function autoloadMainClasses($classname)
+{
+    $classname = str_replace('\\', '/', $classname);
+
+    if (!@include_once $classname . '.php') {
+        throw new RouteException('Invalid file name for connection - ' . $classname);
+    }
+}
+
+spl_autoload_register('autoloadMainClasses');
